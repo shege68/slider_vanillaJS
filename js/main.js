@@ -1,54 +1,51 @@
-// самовикликаюча функція з 4-ма параметрами
-(function (containerID = '#carousel', slideClass = '.slide', intervalTime, isPlayingFlag) {
-  // обєкт для початкового налаштування слайдера
-  const initConfig = {
-    interval: intervalTime,
-    isPlaying: isPlayingFlag,
-    // отримуємо з html id carousel і записуємо в container
-    container: document.querySelector(containerID),
-    // отримуємо слайди
-    slides: document.querySelectorAll(slideClass)
-  }
+// carousel на прототипах
+// прототип Carousel
+// в параметри передаємо користувацькі класи та ID і даємо їм дефолтні імена
+function Carousel(containerID = '#carousel', slideClass = '.slide', interval = 5000, isPlaying = true) {
+  // создаємо властивості
+  this.container = document.querySelector(containerID);
+  this.slides = this.container.querySelectorAll(slideClass);
+  this.interval = interval;
+  this.isPlaying = isPlaying;
+}
 
-  // константи
-  // кількість слайдів
-  const SLIDES_COUNT = initConfig.slides.length;
-  // коди клавіатури
-  const CODE_ARROW_LEFT = 'ArrowLeft';
-  const CODE_ARROW_RIGHT = 'ArrowRight';
-  const CODE_SPACE = 'Space';
-  // класи fontawesome
-  const FA_PAUSE = '<i class="fas fa-pause-circle"></i >';
-  const FA_PLAY = '<i class="fas fa-play-circle"></i >';
-  const FA_PREV = '<i class="fas fa-angle-left"></i>';
-  const FA_NEXT = '<i class="fas fa-angle-right"></i>';
+Carousel.prototype = {
+  _initProps() {
+    this.currentSlide = 0;
 
-  // змінні
-  let currentSlide = 0;
-  let timerID = null;
+    this.SLIDES_COUNT = this.slides.length;
+    this.CODE_ARROW_LEFT = 'ArrowLeft';
+    this.CODE_ARROW_RIGHT = 'ArrowRight';
+    this.CODE_SPACE = 'Space';
+
+    this.FA_PAUSE = '<i class="fas fa-pause-circle"></i >';
+    this.FA_PLAY = '<i class="fas fa-play-circle"></i >';
+    this.FA_PREV = '<i class="fas fa-angle-left"></i>';
+    this.FA_NEXT = '<i class="fas fa-angle-right"></i>';
+  },
 
   // динамічна ініціалізація кнопок класа controls (порядок важливий !)
-  function initControls() {
+  _initControls() {
     // створюємо елемент div
     const controls = document.createElement('div');
     // виводимо кнопки в константи
-    const PAUSE = `<div id="pause-btn" class="control control-pause">${FA_PAUSE}</div>`;
-    const PREV = `<div id="prev-btn" class="control control-prev">${FA_PREV}</div>`;
-    const NEXT = `<div id="next-btn" class="control control-next">${FA_NEXT}</div>`;
+    const PAUSE = `<div id="pause-btn" class="control control-pause">${this.FA_PAUSE}</div>`;
+    const PREV = `<div id="prev-btn" class="control control-prev">${this.FA_PREV}</div>`;
+    const NEXT = `<div id="next-btn" class="control control-next">${this.FA_NEXT}</div>`;
     // добавляємо діву id controls-container та клас controls
     controls.setAttribute('id', 'controls-container');
     controls.setAttribute('class', 'controls');
     // добавляємо в дів кнопки
     controls.innerHTML = PAUSE + PREV + NEXT;
     // добавляємо клас controls всередину container
-    initConfig.container.append(controls);
-    pauseBtn = initConfig.container.querySelector('#pause-btn');
-    prevBtn = initConfig.container.querySelector('#prev-btn');
-    nextBtn = initConfig.container.querySelector('#next-btn');
-  }
+    this.container.append(controls);
+    this.pauseBtn = this.container.querySelector('#pause-btn');
+    this.prevBtn = this.container.querySelector('#prev-btn');
+    this.nextBtn = this.container.querySelector('#next-btn');
+  },
 
   // динамічна ініціалізація індикаторів класа indicators (порядок важливий !)
-  function initIndicators() {
+  _initIndicators() {
     // створюємо елемент div
     const indicators = document.createElement('div');
 
@@ -56,7 +53,7 @@
     indicators.setAttribute('class', 'indicators');
 
     // в циклі добавляємо дочірній клас indicator в indicators по кількості слайдів
-    for (let i = 0; i < SLIDES_COUNT; i++) {
+    for (let i = 0; i < this.SLIDES_COUNT; i++) {
       const indicator = document.createElement('div');
       indicator.setAttribute('class', i !== 0 ? 'indicator' : 'indicator active');
       //indicator.setAttribute('data-slide-to', i);
@@ -66,103 +63,100 @@
       indicators.append(indicator);
     }
     // добавляємо сам клас indicators до батьківського container
-    initConfig.container.append(indicators);
-    indicatorsContainer = initConfig.container.querySelector('#indicators-container');
-    indicatorItems = indicatorsContainer.querySelectorAll('.indicator');
-  }
-
-  function gotoNth(n) {
-    //debugger;
-    console.log(n);
-    initConfig.slides[currentSlide].classList.toggle('active');
-    indicatorItems[currentSlide].classList.toggle('active');
-    currentSlide = (n + SLIDES_COUNT) % SLIDES_COUNT;
-    indicatorItems[currentSlide].classList.toggle('active');
-    initConfig.slides[currentSlide].classList.toggle('active');
-  }
-
-  function gotoPrev() {
-    gotoNth(currentSlide - 1);
-  }
-
-  function gotoNext() {
-    gotoNth(currentSlide + 1);
-  }
-
-  function tick(flag = true) {
-    if (!flag) {
-      pauseBtn.innerHTML = FA_PLAY;
-      return;
-    }
-
-    if (timerID) return;
-    // функція setInterval спрацьовує циклічно, через заданий інтервал і визиває функцію-колбек
-    timerID = setInterval(gotoNext, initConfig.interval);
-    console.log(timerID);
-  }
-
-  function playHandler() {
-    pauseBtn.innerHTML = FA_PAUSE;
-    initConfig.isPlaying = true;
-    tick();
-  }
-
-  function pauseHandler() {
-    clearInterval(timerID);
-    pauseBtn.innerHTML = FA_PLAY;
-    initConfig.isPlaying = false;
-    timerID = null;
-  }
-
-  const pausePlay = () => initConfig.isPlaying ? pauseHandler() : playHandler();
-
-  function prev() {
-    pauseHandler();
-    gotoPrev();
-  }
-
-  function next() {
-    pauseHandler();
-    gotoNext();
-  }
-
-  // функція обробник індикаторів
-  function indicate(e) {
-    const target = e.target;
-
-    if (target && target.classList.contains('indicator')) {
-      pauseHandler();
-      gotoNth(+target.dataset.slideTo);
-    }
-  }
-
-  // функція обробник кодів клавіатури
-  function pressKey(e) {
-    console.log(e);
-    if (e.code === CODE_ARROW_LEFT) prev();
-    if (e.code === CODE_ARROW_RIGHT) next();
-    if (e.code === CODE_SPACE) pausePlay();
-  }
+    this.container.append(indicators);
+    this.indicatorsContainer = this.container.querySelector('#indicators-container');
+    this.indicatorItems = this.indicatorsContainer.querySelectorAll('.indicator');
+    //console.log(this.indicatorItems);
+  },
 
   // обробники подій
-  function initListener() {
-    pauseBtn.addEventListener('click', pausePlay);
-    prevBtn.addEventListener('click', prev);
-    nextBtn.addEventListener('click', next);
-    indicatorsContainer.addEventListener('click', indicate);
+  _initListeners() {
+    this.pauseBtn.addEventListener('click', this.pausePlay.bind(this));
+    this.prevBtn.addEventListener('click', this.prev.bind(this));
+    this.nextBtn.addEventListener('click', this.next.bind(this));
+    this.indicatorsContainer.addEventListener('click', this._indicate.bind(this));
     // для клавіатури
-    document.addEventListener('keydown', pressKey);
-  }
+    document.addEventListener('keydown', this._pressKey.bind(this));
+  },
+
+  // з _ це приватні методи
+  _gotoNth(n) {
+    this.slides[this.currentSlide].classList.toggle('active');
+    this.indicatorItems[this.currentSlide].classList.toggle('active');
+    this.currentSlide = (n + this.SLIDES_COUNT) % this.SLIDES_COUNT;
+    this.indicatorItems[this.currentSlide].classList.toggle('active');
+    this.slides[this.currentSlide].classList.toggle('active');
+  },
+
+  _gotoPrev() {
+    this._gotoNth(this.currentSlide - 1);
+  },
+
+  _gotoNext() {
+    this._gotoNth(this.currentSlide + 1);
+  },
+
+  _tick() {
+    // функція setInterval спрацьовує циклічно, через 2 сек. і визиває функцію-колбек
+    this.timerID = setInterval(() => this._gotoNext(), this.interval);
+  },
+
+  _play() {
+    this.pauseBtn.innerHTML = this.FA_PAUSE;
+    this.isPlaying = true;
+    this._tick();
+  },
+
+  _pause() {
+    this.pauseBtn.innerHTML = this.FA_PLAY;
+    this.isPlaying = false;
+    clearInterval(this.timerID);
+  },
+
+  pausePlay() {
+    return this.isPlaying
+      ? this._pause()
+      : this._play();
+  },
+
+  prev() {
+    this._pause();
+    this._gotoPrev();
+  },
+
+  next() {
+    this._pause();
+    this._gotoNext();
+  },
+
+  _indicate(e) {
+    const target = e.target;
+    console.log(target.innerHTML);
+
+    if (target && target.classList.contains('indicator')) {
+      this._pause();
+      //_gotoNth(+target.getAttribute('data-slide-to'));
+      //console.log(target.getAttribute('data-slide-to'));
+      // або через .dataset і 'data-slide-to' ставиться як .slideTo
+      this._gotoNth(+target.dataset.slideTo);
+    }
+  },
+
+  _pressKey(e) {
+    console.log(e);
+    if (e.code === this.CODE_ARROW_LEFT) this.prev();
+    if (e.code === this.CODE_ARROW_RIGHT) this.next();
+    if (e.code === this.CODE_SPACE) this.pausePlay();
+  },
 
   // головна функція
-  function initApp() {
-    initControls();
-    initIndicators();
-    initListener();
-    tick(initConfig.isPlaying);
-  }
+  initApp() {
+    this._initProps();
+    this._initControls();
+    this._initIndicators();
+    this._initListeners();
+    this._tick();
+  },
+};
 
-  // точка входа !!!
-  initApp();
-
-}('#myslider', '.item', 2000, false));
+Carousel.prototype.constructor = Carousel;
