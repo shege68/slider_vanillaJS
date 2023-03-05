@@ -121,6 +121,8 @@ class Carousel {
     this.prevBtn.addEventListener('click', this.prev.bind(this));
     this.nextBtn.addEventListener('click', this.next.bind(this));
     this.indicatorsContainer.addEventListener('click', this._indicate.bind(this));
+    this.slidesContainer.addEventListener('mouseenter', this._pause.bind(this));
+    this.slidesContainer.addEventListener('mouseleave', this._play.bind(this));
   }
 
   _pauseVisible(isVisible = true) {
