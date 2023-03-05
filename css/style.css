@@ -119,3 +119,10 @@ body {
 .indicator.active {
   background-color: tomato;
 }
+
+.control-pause span {
+  position: absolute;
+  display: block;
+  opacity: 0;
+  transition: 0.5s;
+}

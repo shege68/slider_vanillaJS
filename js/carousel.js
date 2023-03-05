@@ -64,7 +64,8 @@ class Carousel {
     const controls = document.createElement('div');
     // виводимо кнопки в константи
     const PAUSE = `<div id="pause-btn" class="control control-pause">
-                    ${this.isPlaying ? this.FA_PAUSE : this.FA_PLAY}
+                    <span id="fa-pause-icon">${this.FA_PAUSE}</span>
+                    <span id="fa-play-icon">${this.FA_PLAY}</span>
                   </div>`;
     const PREV = `<div id="prev-btn" class="control control-prev">${this.FA_PREV}</div>`;
     const NEXT = `<div id="next-btn" class="control control-next">${this.FA_NEXT}</div>`;
@@ -79,6 +80,12 @@ class Carousel {
     this.pauseBtn = this.container.querySelector('#pause-btn');
     this.prevBtn = this.container.querySelector('#prev-btn');
     this.nextBtn = this.container.querySelector('#next-btn');
+
+    this.pauseIcon = this.container.querySelector('#fa-pause-icon');
+    console.log(this.pauseIcon);
+    this.playIcon = this.container.querySelector('#fa-play-icon');
+    console.log(this.playIcon);
+    this.isPlaying ? this._pauseVisible() : this._playVisible();
   }
 
   // динамічна ініціалізація індикаторів класа indicators (порядок важливий !)
@@ -116,6 +123,15 @@ class Carousel {
     this.indicatorsContainer.addEventListener('click', this._indicate.bind(this));
   }
 
+  _pauseVisible(isVisible = true) {
+    this.pauseIcon.style.opacity = isVisible ? 1 : 0;
+    this.playIcon.style.opacity = !isVisible ? 1 : 0;
+  }
+
+  _playVisible() {
+    this._pauseVisible(false);
+  }
+
   // з _ це приватні методи
   _gotoNth(n) {
     this.slideItems[this.currentSlide].classList.toggle('active');
@@ -147,13 +163,13 @@ class Carousel {
   }
 
   _play() {
-    this.pauseBtn.innerHTML = this.FA_PAUSE;
+    this._pauseVisible();
     this.isPlaying = true;
     this._tick();
   }
 
   _pause() {
-    this.pauseBtn.innerHTML = this.FA_PLAY;
+    this._playVisible();
     this.isPlaying = false;
     clearInterval(this.timerID);
     //debugger;
