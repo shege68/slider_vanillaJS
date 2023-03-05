@@ -60,6 +60,18 @@ just for appearance; change whatever you want
   background: purple;
 }
 
+.slide:nth-of-type(6) {
+  background: tomato;
+}
+
+.slide:nth-of-type(7) {
+  background: skyblue;
+}
+
+.slide:nth-of-type(8) {
+  background: blueviolet;
+}
+
 body {
   margin: 20px;
   font-family: Arial, Helvetica, sans-serif;
