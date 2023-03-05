@@ -2,7 +2,7 @@
 // прототип Carousel
 // в параметри передаємо користувацькі класи та ID і даємо їм дефолтні імена
 function Carousel(containerID = '#carousel', slideClass = '.slide', interval = 5000, isPlaying = true) {
-  // создаємо властивості
+  // створюємо властивості
   this.container = document.querySelector(containerID);
   this.slides = this.container.querySelectorAll(slideClass);
   this.interval = interval;
