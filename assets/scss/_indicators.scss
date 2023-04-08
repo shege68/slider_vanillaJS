@@ -1,28 +1,22 @@
+@use "presets" as *;
+@use "mixins" as *;
+
 .indicators {
   display: flex;
-  gap: 20px;
-  margin-bottom: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: $gap;
+  margin-bottom: $gap;
 }
 
 .indicator {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.5em;
-  background-color: lightsteelblue;
-  min-width: 20px;
-  min-height: 20px;
-  min-height: 40px;
-  min-width: 40px;
-  border-radius: 40px;
-  cursor: pointer;
-  font-size: 40px;
-}
+  @extend %style;
 
-.indicator.active {
-  background-color: tomato;
-}
+  &.active {
+    background-color: $color-tomato;
+  }
 
-.indicator:hover {
-  background-color: steelblue;
+  &:hover {
+    background-color: $color-steelblue;
+  }
 }

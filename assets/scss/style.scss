@@ -1,5 +1,6 @@
-@import "../libs/normalize";
-@import "common";
-@import "controls";
-@import "indicators";
-@import "slides";
+@use "../libs/normalize";
+
+@use "common";
+@use "controls";
+@use "indicators";
+@use "slides";

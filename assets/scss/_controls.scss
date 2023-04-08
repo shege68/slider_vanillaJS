@@ -1,29 +1,24 @@
+@use "presets" as *;
+@use "mixins" as *;
+
 .controls {
   display: flex;
-  gap: 20px;
-  margin-bottom: 20px;
+  justify-content: center;
+  gap: $gap;
+  margin-bottom: $gap;
 }
 
 .control {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.5em;
-  background-color: lightsteelblue;
-  min-height: 40px;
-  min-width: 40px;
-  border-radius: 40px;
-  cursor: pointer;
-  font-size: 40px;
-}
+  @extend %style;
 
-.control:hover {
-  background-color: steelblue;
-}
+  &:hover {
+    background-color: $color-steelblue;
+  }
 
-.control-pause span {
-  position: absolute;
-  display: block;
-  opacity: 0;
-  transition: 0.5s;
+  &-pause span {
+    position: absolute;
+    display: block;
+    opacity: 0;
+    transition: 0.5s;
+  }
 }
