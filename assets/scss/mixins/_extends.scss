@@ -4,10 +4,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.5em;
-  background-color: $color-lightsteelblue;
-  min-height: $gap-x2;
+
   min-width: $gap-x2;
-  border-radius: $gap-x2;
+  min-height: $gap-x2;
+  padding: 0.5em;
+
   cursor: pointer;
+
+  border-radius: $gap-x2;
+  background-color: $color-lightsteelblue;
 }

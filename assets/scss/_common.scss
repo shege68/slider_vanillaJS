@@ -1,12 +1,23 @@
 @use "presets" as *;
+@use "mixins" as *;
 
 html {
-  font-size: $font-size;
   font-family: $font-family;
+
+  @include lg-min {
+    font-size: $font-size-lg;
+  }
+  @include lg-md {
+    font-size: $font-size-md;
+  }
+  @include md {
+    font-size: $font-size-sm;
+  }
 }
 
 body {
   margin: $gap;
+
   background-color: $color-gray-light;
 }
 

@@ -4,8 +4,10 @@
 .controls {
   display: flex;
   justify-content: center;
-  gap: $gap;
+
   margin-bottom: $gap;
+
+  gap: $gap;
 }
 
 .control {
@@ -17,8 +19,11 @@
 
   &-pause span {
     position: absolute;
+
     display: block;
-    opacity: 0;
+
     transition: 0.5s;
+
+    opacity: 0;
   }
 }

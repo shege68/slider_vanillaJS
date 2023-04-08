@@ -3,10 +3,12 @@
 
 .indicators {
   display: flex;
-  justify-content: center;
   flex-wrap: wrap;
-  gap: $gap;
+  justify-content: center;
+
   margin-bottom: $gap;
+
+  gap: $gap;
 }
 
 .indicator {
